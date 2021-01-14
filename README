@@ -1,0 +1,43 @@
+Pre-requiste:
+Install Docker and k8s (can be done using microk8s which simlify installation with cluster with single node of installed pc)
+
+# Install microk8s & docker
+sudo snap install microk8s --classic --channel=1.19
+snap install docker
+
+# Build docker for self testing: 
+# In app directory: 
+# Build docker image (username is your user name  in docker hub) 
+docker build . -t username/helloworld:1.0, in below example it is gnetanel
+# to test it run
+docker run -i -p 8080:80 gnetanel/helloworld:1.0
+# connect to port 8080 in local browser to see hello world printout 
+
+#upload docker image to docker hub, for that you need an account...
+docker login  # you would be prompt for user/pass in docker hub.
+# push it to your user account , below it is gnetanel
+docker push gnetanel/helloworld:1.0
+
+# now - testing this with kubernetes
+# cd to k8s
+# in the deployoment.yaml file, modify the image: gnetanel/helloworld:1.0 with your image on docker hub.
+# Create the deployment
+microk8s.kubectl create -f deployment.yaml
+# now you can verify two pods were created by running
+microk8s.kubectl get pods
+# delete pods to see other come instead
+microk8s.kubectl delete POD_NAME # choose one you get form microk8s.kutectl get pods command
+# wait and see other one created by running 
+microk8s.kubectl get pods
+
+#Now lets run the load balancer:
+microk8s.kubectl create lb.yaml
+
+# to check service, run
+microk8s.kubectl get svc
+
+
+ 
+
+
+
